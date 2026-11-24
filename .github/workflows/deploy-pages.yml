@@ -47,6 +47,17 @@ jobs:
                   shutil.copytree(src, dst, dirs_exist_ok=True)
               else:
                   shutil.copy2(src, dst)
+          index_path = os.path.join("site", "index.html")
+          with open(index_path, "r", encoding="utf-8") as f:
+              html = f.read()
+          broken = "const D = const D ="
+          if broken in html:
+              html = html.replace(broken, "const D =", 1)
+              with open(index_path, "w", encoding="utf-8") as f:
+                  f.write(html)
+              print("Fixed duplicate const D declaration in index.html")
+          else:
+              print("No duplicate const D declaration found")
           print("Published website root:", root)
           PY
       - name: Upload Pages artifact
