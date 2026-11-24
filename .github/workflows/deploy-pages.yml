@@ -1,0 +1,58 @@
+name: Deploy profile to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Extract website from ZIP
+        run: |
+          python - <<'PY'
+          import glob, zipfile, os, shutil
+          archives = glob.glob("*.zip") + glob.glob("*.ZIP")
+          if not archives:
+              raise SystemExit("No ZIP archive found")
+          archive = max(archives, key=os.path.getsize)
+          os.makedirs("site", exist_ok=True)
+          with zipfile.ZipFile(archive) as z:
+              z.extractall("extracted")
+          matches = glob.glob("extracted/**/index.html", recursive=True)
+          if not matches:
+              raise SystemExit("index.html not found in ZIP")
+          root = os.path.dirname(matches[0])
+          for name in os.listdir(root):
+              src = os.path.join(root, name)
+              dst = os.path.join("site", name)
+              if os.path.isdir(src):
+                  shutil.copytree(src, dst, dirs_exist_ok=True)
+              else:
+                  shutil.copy2(src, dst)
+          print("Published website root:", root)
+          PY
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
