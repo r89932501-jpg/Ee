@@ -1,0 +1,60 @@
+/* ПРОФИЛЬ — единая дизайн-система для всех экранов */
+:root{
+  color-scheme:dark;
+  --brand:#f2c14e;--brand-soft:rgba(242,193,78,.14);
+  --bg:#0c1113;--panel:#131a1d;--panel2:#192226;--line:#26323a;
+  --fg:#e7eeec;--muted:#8c9d9b;--radius:16px;
+  --sec:var(--brand)!important;
+}
+html,body{background-color:var(--bg)!important;color:var(--fg)!important}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif!important}
+h1,h2,h3,.title,.stitle,.viewname,.fulltitle{color:var(--fg)}
+a{color:var(--brand)}
+button,input,select,textarea{font:inherit}
+button,a,input,select,textarea{ -webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--brand)!important;outline-offset:2px}
+button,.btn,.ib,.back,.tab,.result,.sec,.nav button,.tools button,.fullhead button,.fulltools button{
+  border:1px solid var(--line)!important;border-radius:12px!important;
+  background:linear-gradient(180deg,#1b2529,#151e21)!important;color:var(--fg)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.035);
+}
+button:active,.btn:active,.ib:active{transform:scale(.985)}
+input,select,textarea,.searchrow input,.bar input,.searchbox input{
+  color:var(--fg)!important;background:#11191c!important;border:1px solid var(--line)!important;
+  border-radius:12px!important;min-height:44px;
+}
+input::placeholder,textarea::placeholder{color:#71817f!important}
+input:focus,select:focus,textarea:focus{border-color:var(--brand)!important;box-shadow:0 0 0 3px var(--brand-soft)!important;outline:0}
+.section,.sec,.res,.cell,.chart,.viewer,.tab,.result,.section-card,.card,.panel,.content-card{
+  border-radius:var(--radius)!important;border-color:var(--line)!important;
+}
+.section,.res,.viewer,.result,.cell,.card,.panel,.content-card{
+  background:linear-gradient(145deg,#172125,#11181b)!important;
+}
+.section[open],.tab[aria-pressed=true],.result:focus,.result:active{
+  border-color:rgba(242,193,78,.65)!important;
+}
+.num,.pagehead,.eyebrow,.sec b,.res small,.notice strong{color:var(--brand)!important}
+.num{background:var(--brand-soft)!important;border:1px solid rgba(242,193,78,.25)!important;border-radius:12px!important}
+mark{background:rgba(242,193,78,.28)!important;color:#fff4d2!important}
+header,.bar,.searchbox,.header,.viewhead{
+  background:rgba(12,17,19,.92)!important;backdrop-filter:blur(16px);
+}
+header{border-color:var(--line)!important}
+hr,.page,.viewhead{border-color:var(--line)!important}
+.tabbar nav{border-color:rgba(242,193,78,.18)!important;background:rgba(16,23,26,.92)!important}
+.tabbar a[aria-current=page]{color:var(--brand)!important;background:var(--brand-soft)!important}
+.tabbar a[aria-current=page]::after{background:var(--brand)!important}
+.tab[aria-pressed=true]{background:var(--brand-soft)!important;color:var(--brand)!important}
+.canvas,.fullview{background:#e7e7e7!important}
+.chart{background:#11191c!important}
+footer{border-color:var(--line)!important;color:var(--muted)!important}
+@media(max-width:600px){
+  header{padding-left:16px!important;padding-right:16px!important}
+  .wrap{padding-left:12px!important;padding-right:12px!important}
+  .section summary{padding:14px!important}
+  .tabs{gap:7px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}
+}
