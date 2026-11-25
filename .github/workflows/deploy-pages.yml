@@ -60,6 +60,35 @@ jobs:
               print("No duplicate const D declaration found")
           print("Published website root:", root)
           PY
+      - name: Apply shared visual theme to every page
+        run: |
+          python - <<'PY'
+          import os
+          shutil_path = "unified.css"
+          if not os.path.isfile(shutil_path):
+              raise SystemExit("unified.css is missing")
+          import shutil
+          shutil.copy2(shutil_path, "site/unified.css")
+          for base, dirs, files in os.walk("site"):
+              for name in files:
+                  if not name.lower().endswith(".html"):
+                      continue
+                  path = os.path.join(base, name)
+                  with open(path, "r", encoding="utf-8") as f:
+                      html = f.read()
+                  if "unified.css" in html:
+                      continue
+                  rel = os.path.relpath("site/unified.css", base).replace(os.sep, "/")
+                  tag = '<link rel="stylesheet" href="' + rel + '">'
+                  if "</head>" in html.lower():
+                      pos = html.lower().find("</head>")
+                      html = html[:pos] + tag + "\\n" + html[pos:]
+                  else:
+                      html = tag + "\\n" + html
+                  with open(path, "w", encoding="utf-8") as f:
+                      f.write(html)
+          print("Unified theme attached to all HTML pages")
+          PY
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
